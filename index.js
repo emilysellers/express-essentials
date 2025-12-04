@@ -1,19 +1,33 @@
 import express from "express";
 import data from "./data/mockdata.json" assert { type: "json" };
+import dogs from "./data/dogs.json" assert { type: "json" };
+import requestTime from "./middleware/middleware.js";
 
 const app = express();
 
 const PORT = 3000;
 
-//Using Public folder
-app.use(express.static("public"));
-
-//Using Images folder at route /images
+//Using Images folder at virtual path /images
 app.use("/images", express.static("images"));
 
+app.use(requestTime);
+
 //GET
-app.get("/", (request, response) => {
-  response.json(data);
+app.get("/", (req, res) => {
+  res.json(data);
+});
+
+app.get("/reqtime", (req, res) => {
+  let resText = `Request requested at ${req.requestTime}`;
+  res.send(resText);
+});
+
+app.get(/.*fly$/, (req, res) => {
+  res.send("/.*fly$/");
+});
+
+app.get("/dogs", (req, res, next) => {
+  res.json(dogs);
 });
 
 //POST
@@ -32,6 +46,6 @@ app.delete("/delete", (request, response) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`The server is running on port ${PORT}`);
+  console.log(`🚀 The server is running on port ${PORT} 🚀`);
   //console.log(data);
 });
