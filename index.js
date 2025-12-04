@@ -5,9 +5,15 @@ const app = express();
 
 const PORT = 3000;
 
+//Using Public folder
+app.use(express.static("public"));
+
+//Using Images folder at route /images
+app.use("/images", express.static("images"));
+
 //GET
 app.get("/", (request, response) => {
-  response.send("This is a GET request at /");
+  response.json(data);
 });
 
 //POST
